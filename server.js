@@ -41,7 +41,7 @@ app.prepare().then(() => {
 
       if (!rooms[roomId]) {
         rooms[roomId] = {
-          videoId: "VPz9NGNmUcw",
+          videoId: "",
           currentTime: 0,
           isPlaying: false,
           participants: [],

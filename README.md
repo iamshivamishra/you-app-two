@@ -44,80 +44,60 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 # YouTube Watch Party
 
-A real-time YouTube Watch Party application built with **Next.js, Express.js, Socket.IO, and TypeScript**. Users can create rooms, join with a room code, and watch YouTube videos together with synchronized playback.
+A simple real-time watch party application that lets multiple users watch YouTube videos together in a shared room. Video playback stays synchronized for everyone in the room, so when the host or moderator plays, pauses, seeks, or changes a video, all participants see the same thing at the same time.
 
----
+## What It Does
 
-##  Features
+The application allows users to create a room, invite others using a room code, and watch YouTube videos together without manually syncing playback.
 
-### Room Management
+### Main Features
 
-* Create a new watch party room
-* Unique Room ID generation
-* Join rooms using Room ID
-* Real-time participant updates
+* Create and join watch party rooms
+* Watch YouTube videos in sync with other participants
+* Real-time play, pause, and seek synchronization
+* Change videos for everyone in the room instantly
+* Live participant list with role indicators
+* Host and Moderator roles with different permissions
+* Server-side permission checks for secure event handling
 
-### YouTube Integration
+## User Roles
 
-* YouTube IFrame Player API
-* Change video using YouTube URL
-* Shared video experience across all participants
+### Host
 
-### Real-Time Synchronization
+The room creator has full control over the session.
 
-* Play synchronization
-* Pause synchronization
-* Seek synchronization
-* Video change synchronization
-* New participants receive current room state
+Host permissions:
 
-### Role-Based Access Control
+* Play and pause videos
+* Seek to any timestamp
+* Change the current video
+* Promote or demote participants
+* Remove users from the room
 
-#### Host
+### Moderator
 
-* Play / Pause video
-* Seek video
-* Change video
-* Assign roles
-* Remove participants
+Moderators help manage playback.
 
-#### Moderator
+Moderator permissions:
 
-* Play / Pause video
-* Seek video
-* Change video
+* Play and pause videos
+* Seek through videos
+* Change videos
 
-#### Participant
+### Participant
 
-* View-only access
-* Controls disabled
+Participants can watch the session but cannot control playback.
 
-### Participant Management
-
-* Live participant list
-* Real-time join/leave updates
-* Role visibility
-* Remove participants
-* Promote/Demote users
-
-### Backend Security
-
-* Server-side permission validation
-* Unauthorized socket events are rejected
-* Frontend restrictions are backed by backend authorization
-
----
-
-##  Tech Stack
+## Technology Used
 
 ### Frontend
 
-* Next.js 15
+* Next.js
 * React
 * TypeScript
 * Tailwind CSS
 * Socket.IO Client
-* React YouTube
+* YouTube IFrame API
 
 ### Backend
 
@@ -127,9 +107,7 @@ A real-time YouTube Watch Party application built with **Next.js, Express.js, So
 * CORS
 * dotenv
 
----
-
-##  Project Structure
+## Project Structure
 
 ```text
 watch-party/
@@ -147,37 +125,35 @@ watch-party/
 └── README.md
 ```
 
----
+## Environment Variables
 
-##  Environment Variables
+### Frontend
 
-### Frontend (.env.local)
+Create a `.env.local` file inside the frontend directory.
 
 ```env
 NEXT_PUBLIC_SOCKET_URL=http://localhost:5000
 ```
 
-### Backend (.env)
+### Backend
+
+Create a `.env` file inside the backend directory.
 
 ```env
 PORT=5000
 CLIENT_URL=http://localhost:3000
 ```
 
----
+## Running Locally
 
-##  Local Setup
-
-### Clone Repository
+### Clone the Repository
 
 ```bash
-git clone <your-repository-url>
+git clone <repository-url>
 cd watch-party
 ```
 
----
-
-### Backend Setup
+### Start the Backend
 
 ```bash
 cd backend
@@ -185,15 +161,15 @@ npm install
 npm run dev
 ```
 
-Backend runs on:
+Server runs on:
 
 ```text
 http://localhost:5000
 ```
 
----
+### Start the Frontend
 
-### Frontend Setup
+Open a new terminal and run:
 
 ```bash
 cd frontend
@@ -207,44 +183,15 @@ Frontend runs on:
 http://localhost:3000
 ```
 
----
+## How It Works
 
-## 🎯 Usage
+1. A user creates a room.
+2. Other users join using the room code.
+3. The host selects a YouTube video.
+4. Playback actions are sent through Socket.IO.
+5. Connected clients receive updates instantly and stay synchronized.
 
-### Create Room
-
-1. Enter your username
-2. Click "Create Room"
-3. Share the Room ID with others
-
-### Join Room
-
-1. Enter username
-2. Enter Room ID
-3. Click "Join Room"
-
-### Change Video
-
-1. Paste a YouTube URL
-2. Click "Change Video"
-3. All participants receive the new video instantly
-
----
-
-## 🔒 Permission Matrix
-
-| Action       | Host | Moderator | Participant |
-| ------------ | ---- | --------- | ----------- |
-| Play         | ✅    | ✅         | ❌           |
-| Pause        | ✅    | ✅         | ❌           |
-| Seek         | ✅    | ✅         | ❌           |
-| Change Video | ✅    | ✅         | ❌           |
-| Assign Roles | ✅    | ❌         | ❌           |
-| Remove User  | ✅    | ❌         | ❌           |
-
----
-
-## 🔄 Real-Time Events
+## Socket Events
 
 ### Client → Server
 
@@ -255,7 +202,6 @@ http://localhost:3000
 * change_video
 * assign_role
 * remove_participant
-* sync_state_update
 
 ### Server → Client
 
@@ -270,72 +216,35 @@ http://localhost:3000
 * participant_removed
 * kicked
 
----
+## Deployment
 
-## 🌐 Deployment
+### Frontend (Vercel)
 
-### Frontend
-
-Deploy on Vercel
-
-```bash
+```env
 NEXT_PUBLIC_SOCKET_URL=https://your-backend.onrender.com
 ```
 
-### Backend
+### Backend (Render)
 
-Deploy on Render
-
-```bash
+```env
 CLIENT_URL=https://your-frontend.vercel.app
 ```
 
----
+## Future Plans
 
-## 🏗️ Architecture
+Some improvements that could be added later:
 
-```text
-Frontend (Next.js)
-        │
-        ▼
- Socket.IO Client
-        │
-        ▼
- Express + Socket.IO Server
-        │
-        ▼
-   Room State Store
-        │
-        ▼
- Connected Participants
-```
-
----
-
-##  Future Improvements
-
-* Chat system
-* Room password protection
+* Group chat
+* Room passwords
+* Authentication system
+* Playlist support
 * Persistent room storage
-* Host transfer on disconnect
-* Video queue / playlist
-* Authentication
-* Room history
+* Automatic host transfer
+* Watch history
 
----
-
-##  Live Demo
-
-Frontend:
-https://your-frontend.vercel.app
-
-Backend:
-https://your-backend.onrender.com
-
----
-
-## 👨‍💻 Author
+## Author
 
 Shivam Kumar Mishra
 
-Built as a Full Stack Real-Time Watch Party Application using Next.js and Socket.IO.
+This project was built to learn and practice real-time application development using Socket.IO, Next.js, and TypeScript.
+

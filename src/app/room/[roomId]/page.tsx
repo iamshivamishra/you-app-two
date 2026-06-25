@@ -26,7 +26,7 @@ export default function RoomPage() {
     searchParams.get("username") || "Guest";
 
   const [videoId, setVideoId] =
-    useState("VPz9NGNmUcw");
+    useState("");
 
   const [participants, setParticipants] =
     useState<Participant[]>([]);
